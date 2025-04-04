@@ -314,7 +314,7 @@ function SettingsCard() {
         )}
         <div className="grid gap-2">
           <LabeledSelect
-            id="selected-transcription-service"
+            id="selected-transcription-whservice"
             label="Transcription Service"
             options={TRANSCRIPTION_SERVICE_OPTIONS}
             value={settings["transcription.selectedTranscriptionService"]}

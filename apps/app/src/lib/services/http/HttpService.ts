@@ -1,54 +1,16 @@
-// apps/app/src/lib/services/http/HttpService.ts
-import { Ok, Err } from '@epicenterhq/result';
-import type { z } from 'zod';
-
-type HttpServiceErrCodes =
-	| { code: 'NetworkError'; error: unknown }
-	| { code: 'HttpError'; error: unknown; status: number }a
-	| { code: 'ParseError'; error: unknown };
-
-type HttpServiceErrProperties = {
-	_tag: 'HttpServiceErr';
-	error: unknown;
-} & HttpServiceErrCodes;
-
-export type HttpServiceErr = Err<HttpServiceErrProperties>;
-export type HttpServiceResult<T> = Ok<T> | HttpServiceErr;
-
-export const HttpServiceErr = (
-	args: { error: unknown } & HttpServiceErrCodes,
-): HttpServiceErr =>
-	Err({
-		_tag: 'HttpServiceErr',
-		...args,
-	});
-
-export type HttpService = {
-	post: <TSchema extends z.ZodTypeAny>(config: {
-		url: string;
-		body: BodyInit | FormData;
-		schema: TSchema;
-		headers?: Record<string, string>;
-		sslVerify?: boolean; // Added sslVerify option
-	}) => Promise<HttpServiceResult<z.infer<TSchema>>>;
-};
-
 export function createHttpService(): HttpService {
 	return {
 		async post<TSchema extends z.ZodTypeAny>({
 			url,
 			body,
 			schema,
-			headers = {},
+			headers = {}, // Default to empty object, but don't override Content-Type for FormData
 			sslVerify = true,
 		}) {
 			try {
-				// Note: In browsers, fetch doesn't allow disabling SSL verification natively.
-				// For local testing with http, ensure the URL uses http:// (not https://).
-				// sslVerify=false is a no-op in browsers unless proxied externally.
 				const response = await fetch(url, {
 					method: 'POST',
-					headers,
+					headers: body instanceof FormData ? {} : headers, // Skip headers for FormData
 					body,
 					credentials: 'omit',
 				});
@@ -81,6 +43,3 @@ export function createHttpService(): HttpService {
 		},
 	};
 }
-
-// Export a singleton instance if desired
-export const httpService = createHttpService();

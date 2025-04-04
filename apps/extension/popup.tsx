@@ -22,8 +22,6 @@ import {
   useWhisperingRecorderState,
   useWhisperingTranscribedText,
 } from "~lib/storage";
-// import { createWhisperCppTranscriptionService } from "./transcription/TranscriptionService.whispercpp"; // Adjust path
-// import type { HttpService } from "../http/HttpService";
 import "./style.css";
 
 function IndexPopup() {
@@ -43,9 +41,6 @@ function IndexPage() {
   const transcribedText = useWhisperingTranscribedText();
   const [file, setFile] = useState<File | null>(null);
   const [isTranscribing, setIsTranscribing] = useState(false);
-  // const transcriptionService = createWhisperCppTranscriptionService({
-  //   HttpService: httpService,
-  // });
 
   const recorderStateAsIcon =
     recorderState === "SESSION+RECORDING" ? "⏹️" : "🎙️";
@@ -67,6 +62,7 @@ function IndexPage() {
     }
 
     setIsTranscribing(true);
+    const transcriptionService = userConfiguredServices.transcription; // Use the dynamic service
     const result = await transcriptionService.transcribe({ file });
     setIsTranscribing(false);
 
@@ -79,8 +75,7 @@ function IndexPage() {
       return;
     }
 
-    // Update transcribed text in storage (assuming this is how your app handles it)
-    // You might need to adjust this based on your app's storage logic
+    // Update transcribed text in storage
     await app.setTranscribedText(result.data.transcribedText);
   };
 

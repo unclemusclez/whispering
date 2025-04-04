@@ -153,12 +153,12 @@ export const userConfiguredServices = (() => {
 						apiKey: settings.value['apiKeys.openai'],
 					});
 				}
-				case 'Whisper.cpp': {
+				case 'WhisperCpp': {
 					return createWhisperCppTranscriptionService({
 						HttpService,
-						apiKey: settings.value['apiKeys.whispercpp'],
-						serverUrl = settings.value['transcription.whisperCpp.serverUrl'];
-      					sslVerify = settings.value['transcription.sslVerify'];
+						serverUrl: settings.value['transcription.whisperCpp.serverUrl'],
+						sslVerify: settings.value['transcription.sslVerify'],
+						model: settings.value['transcription.whisperCpp.model'], // Pass the model
 					});
 				}
 				case 'Groq': {
