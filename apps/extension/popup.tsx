@@ -22,8 +22,8 @@ import {
   useWhisperingRecorderState,
   useWhisperingTranscribedText,
 } from "~lib/storage";
-import { createWhisperCppTranscriptionService } from "~lib/services/transcription/TranscriptionService.whispercpp"; // Adjust path
-import { httpService } from "~lib/services/http/HttpService"; // Adjust path
+// import { createWhisperCppTranscriptionService } from "./transcription/TranscriptionService.whispercpp"; // Adjust path
+// import type { HttpService } from "../http/HttpService";
 import "./style.css";
 
 function IndexPopup() {
@@ -43,9 +43,9 @@ function IndexPage() {
   const transcribedText = useWhisperingTranscribedText();
   const [file, setFile] = useState<File | null>(null);
   const [isTranscribing, setIsTranscribing] = useState(false);
-  const transcriptionService = createWhisperCppTranscriptionService({
-    HttpService: httpService,
-  });
+  // const transcriptionService = createWhisperCppTranscriptionService({
+  //   HttpService: httpService,
+  // });
 
   const recorderStateAsIcon =
     recorderState === "SESSION+RECORDING" ? "⏹️" : "🎙️";

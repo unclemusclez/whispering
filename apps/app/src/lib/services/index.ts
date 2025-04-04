@@ -37,6 +37,7 @@ import { createRunTransformationService } from './runTransformation';
 import { createPlaySoundServiceDesktop } from './sound/PlaySoundService.desktop';
 import { createPlaySoundServiceWeb } from './sound/PlaySoundService.web';
 import { createFasterWhisperServerTranscriptionService } from './transcription/TranscriptionService.fasterWhisperServer';
+import { createWhisperCppTranscriptionService } from './transcription/TranscriptionService.whispercpp';
 import { createGroqTranscriptionService } from './transcription/TranscriptionService.groq';
 import { createOpenaiTranscriptionService } from './transcription/TranscriptionService.openai';
 import { createElevenLabsTranscriptionService } from './transcription/TranscriptionService.elevenlabs';
@@ -150,6 +151,14 @@ export const userConfiguredServices = (() => {
 					return createOpenaiTranscriptionService({
 						HttpService,
 						apiKey: settings.value['apiKeys.openai'],
+					});
+				}
+				case 'Whisper.cpp': {
+					return createWhisperCppTranscriptionService({
+						HttpService,
+						apiKey: settings.value['apiKeys.whispercpp'],
+						serverUrl = settings.value['transcription.whisperCpp.serverUrl'];
+      					sslVerify = settings.value['transcription.sslVerify'];
 					});
 				}
 				case 'Groq': {
